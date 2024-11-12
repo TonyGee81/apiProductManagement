@@ -7,6 +7,7 @@ use App\Validator\Product\CodeConstraintValidator;
 use App\Repository\ProductRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -22,6 +23,7 @@ class Product
     private string $code;
 
     #[ORM\Column(type: Types::TEXT, nullable: false)]
+    #[Groups(['show_product'])]
     private string $description;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2, nullable: false)]
