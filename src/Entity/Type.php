@@ -38,6 +38,11 @@ class Type
         $this->products = new ArrayCollection();
     }
 
+    public function __toString(): string
+    {
+        return $this->name;
+    }
+
     public function getId()
     {
         return $this->id;

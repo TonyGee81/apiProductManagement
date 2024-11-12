@@ -20,7 +20,6 @@ final class Version20241112112841 extends AbstractMigration
         $this->addSql('CREATE TABLE type (id VARCHAR(255) NOT NULL, name VARCHAR(10) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('COMMENT ON COLUMN type.created_at IS \'(DC2Type:datetime_immutable)\'');
         $this->addSql('COMMENT ON COLUMN type.updated_at IS \'(DC2Type:datetime_immutable)\'');
-
     }
 
     public function down(Schema $schema): void
