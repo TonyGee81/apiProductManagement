@@ -34,6 +34,11 @@ class Product
     #[ORM\JoinColumn(nullable: false)]
     private ?Supplier $supplier = null;
 
+    #[ORM\ManyToOne(inversedBy: 'products')]
+    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\Column(length: 10)]
+    private ?Type $type = null;
+
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
@@ -87,6 +92,19 @@ class Product
     public function setSupplier(?Supplier $supplier): self
     {
         $this->supplier = $supplier;
+
+        return $this;
+    }
+
+    public function getType(): Type
+    {
+        return $this->type;
+    }
+
+
+    public function setType(?Type $type): self
+    {
+        $this->type = $type;
 
         return $this;
     }
