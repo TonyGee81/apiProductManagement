@@ -15,29 +15,30 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class ProductController extends AbstractController
 {
-
-    public function __construct(
-        private SerializerInterface $serializer
-    )
+    #[Route('/products', name: 'show_products', methods: ['GET'])]
+    public function getProducts(Request $request, ProductRepository $productRepository): JsonResponse
     {
+        $products = $productRepository->paginateProducts($request->query->getInt('page', 1));
+        $groups = $request->query->all('groups');
+
+        return $this->json($products, 200, [], ['groups' => $groups]);
     }
 
-    #[Route('/products', name: 'products', methods: ['GET'])]
-    public function getProducts(ProductRepository $productRepository): JsonResponse
+    #[Route('/products/{productId}', name: 'show_product', methods: ['GET'])]
+    public function getProduct(Product $productId, Request $request, ProductRepository $productRepository): JsonResponse
     {
-        $products = $productRepository->findAll();
-        $json = $this->serializer->serialize($products, 'json', ['groups' => ['show_product']]);
+        $product = $productRepository->find($productId);
+        $groups = $request->query->all('groups');
 
-        return $this->json([
-            'products' => $json,
-        ]);
+        return $this->json($product, 200, [], ['groups' => $groups]);
     }
 
-    #[Route('/product/{productId}', name: 'product_edit', methods: ['PATCH'])]
+    #[Route('/product/{productId}', name: 'edit_product', methods: ['PATCH'])]
     public function editProduct(Product $productId, Request $request, EntityManagerInterface $entityManager, ProductRepository $productRepository, TypeRepository $typeRepository): JsonResponse
     {
 
         $content = json_decode($request->getContent());
+        $groups = $request->query->all('groups');
         $type= $typeRepository->find($content->type);
 
         $product = $productRepository->find($productId);
@@ -45,11 +46,7 @@ class ProductController extends AbstractController
 
         $entityManager->flush();
 
-        $json = $this->serializer->serialize($product, 'json', ['groups' => ['show_edit_product']]);
+        return $this->json($product, 200, [], ['groups' => $groups]);
 
-        return $this->json([
-            'description' => $product->getDescription(),
-            'type' => $product->getType()->getName(),
-        ]);
     }
 }

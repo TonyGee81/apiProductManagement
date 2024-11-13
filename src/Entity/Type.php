@@ -7,6 +7,7 @@ use App\Repository\TypeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: TypeRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -19,6 +20,7 @@ class Type
 
     #[ORM\Column(length: 10, nullable: false)]
     #[TypeConstraintValidator]
+    #[Groups(['show_product', 'edit_product'])]
     private string $name;
 
     /**

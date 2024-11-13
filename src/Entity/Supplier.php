@@ -6,6 +6,7 @@ use App\Repository\SupplierRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: SupplierRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -14,9 +15,11 @@ class Supplier
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['show_products', 'show_product', 'edit_product'])]
     private $id;
 
     #[ORM\Column(length: 255, nullable: false)]
+    #[Groups(['show_product', 'edit_product'])]
     private string $name;
 
     /**

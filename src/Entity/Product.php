@@ -16,29 +16,30 @@ class Product
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['show_products','show_product', 'edit_product'])]
     private $id;
 
     #[ORM\Column(length: 10, nullable: false)]
-    #[Groups(['show_edit_product'])]
+    #[Groups(['show_products', 'edit_product'])]
     #[CodeConstraintValidator]
     private string $code;
 
     #[ORM\Column(type: Types::TEXT, nullable: false)]
-    #[Groups(['show_product', 'show_edit_product'])]
+    #[Groups(['show_product', 'edit_product'])]
     private string $description;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2, nullable: false)]
-    #[Groups(['show_edit_product'])]
+    #[Groups(['show_products','show_product', 'edit_product'])]
     #[PriceConstraintValidator]
     private string $price;
 
     #[ORM\ManyToOne(inversedBy: 'products')]
-    #[Groups(['show_edit_product'])]
+    #[Groups(['show_product', 'edit_product'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Supplier $supplier = null;
 
     #[ORM\ManyToOne(inversedBy: 'products')]
-    #[Groups(['show_edit_product'])]
+    #[Groups(['show_product', 'edit_product'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Type $type = null;
 
