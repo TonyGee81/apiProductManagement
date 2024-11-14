@@ -9,9 +9,8 @@ use Doctrine\ORM\EntityManagerInterface;
 readonly class ImportCsvService
 {
     public function __construct(
-        private EntityManagerInterface $entityManager
-    )
-    {
+        private EntityManagerInterface $entityManager,
+    ) {
     }
 
     public function import(string $code, string $description, string $price, string $supplierId): void

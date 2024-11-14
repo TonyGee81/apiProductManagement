@@ -22,6 +22,5 @@ class TypeConstraintValidator extends ConstraintValidator
         if (!is_numeric($value)) {
             $this->context->buildViolation($constraint->message);
         }
-
     }
 }

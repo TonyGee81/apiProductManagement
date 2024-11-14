@@ -15,5 +15,4 @@ class SupplierRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Supplier::class);
     }
-
 }

@@ -13,7 +13,6 @@ use Knp\Component\Pager\PaginatorInterface;
  */
 class ProductRepository extends ServiceEntityRepository
 {
-
     public function __construct(ManagerRegistry $registry, private readonly PaginatorInterface $paginator)
     {
         parent::__construct($registry, Product::class);
@@ -22,7 +21,7 @@ class ProductRepository extends ServiceEntityRepository
     public function paginateProducts(int $page): PaginationInterface
     {
         return $this->paginator->paginate(
-            $this->createQueryBuilder('p')->leftJoin('p.supplier', 's')->leftJoin('p.type', 't')->addSelect('s','t'),
+            $this->createQueryBuilder('p')->leftJoin('p.supplier', 's')->leftJoin('p.type', 't')->addSelect('s', 't'),
             $page,
             20,
             [
@@ -31,7 +30,4 @@ class ProductRepository extends ServiceEntityRepository
             ]
         );
     }
-
-
-
 }

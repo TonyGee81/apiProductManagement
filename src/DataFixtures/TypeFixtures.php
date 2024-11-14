@@ -12,10 +12,10 @@ class TypeFixtures extends Fixture
     {
         $types = [
             'légume',
-            'fruit'
+            'fruit',
         ];
 
-        for ($i = 0; $i < count($types) ; $i++) {
+        for ($i = 0; $i < count($types); ++$i) {
             $type = new Type();
             $type
                 ->setName($types[$i])

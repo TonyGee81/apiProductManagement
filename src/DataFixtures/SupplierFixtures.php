@@ -12,10 +12,10 @@ class SupplierFixtures extends Fixture
     {
         $suppliers = [
             'vegeland',
-            'gourmandland'
+            'gourmandland',
         ];
 
-        for ($i = 0; $i < count($suppliers) ; $i++) {
+        for ($i = 0; $i < count($suppliers); ++$i) {
             $supplier = new Supplier();
             $supplier
                 ->setName($suppliers[$i])

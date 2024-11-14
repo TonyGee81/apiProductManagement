@@ -8,7 +8,7 @@ class paginationDTO
 {
     public function __construct(
         #[Assert\Positive()]
-        public readonly ?int $page = 1
-    )
-    {}
+        public readonly ?int $page = 1,
+    ) {
+    }
 }

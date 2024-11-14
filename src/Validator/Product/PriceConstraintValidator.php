@@ -27,6 +27,5 @@ class PriceConstraintValidator extends ConstraintValidator
         if ($value > 1000 || $value < 0) {
             $this->context->buildViolation($constraint->message);
         }
-
     }
 }

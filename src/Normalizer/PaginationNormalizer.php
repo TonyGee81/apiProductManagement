@@ -11,7 +11,7 @@ class PaginationNormalizer implements NormalizerInterface
 {
     public function __construct(
         #[Autowire(service: 'serializer.normalizer.object')]
-        private NormalizerInterface $normalizer
+        private NormalizerInterface $normalizer,
     ) {
     }
 
@@ -25,7 +25,7 @@ class PaginationNormalizer implements NormalizerInterface
             'items' => array_map(fn (Product $recipe) => $this->normalizer->normalize($recipe, $format, $context), $object->getItems()),
             'total' => $object->getTotalItemCount(),
             'page' => $object->getCurrentPageNumber(),
-            'lastPage' => ceil($object->getTotalItemCount() / $object->getItemNumberPerPage())
+            'lastPage' => ceil($object->getTotalItemCount() / $object->getItemNumberPerPage()),
         ];
     }
 
@@ -37,7 +37,7 @@ class PaginationNormalizer implements NormalizerInterface
     public function getSupportedTypes(?string $format): array
     {
         return [
-            PaginationInterface::class => true
+            PaginationInterface::class => true,
         ];
     }
 }

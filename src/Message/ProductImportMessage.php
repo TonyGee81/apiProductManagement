@@ -9,8 +9,7 @@ class ProductImportMessage
         private readonly string $description,
         private readonly string $price,
         private readonly string $supplierId,
-    )
-    {
+    ) {
     }
 
     public function getCode(): string
@@ -32,5 +31,4 @@ class ProductImportMessage
     {
         return $this->supplierId;
     }
-
 }

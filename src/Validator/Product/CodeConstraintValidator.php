@@ -22,6 +22,5 @@ class CodeConstraintValidator extends ConstraintValidator
         if (count($value) > 6) {
             $this->context->buildViolation($constraint->message);
         }
-
     }
 }

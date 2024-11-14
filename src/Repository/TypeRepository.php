@@ -15,7 +15,4 @@ class TypeRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Type::class);
     }
-
-
-
 }

@@ -2,9 +2,9 @@
 
 namespace App\Entity;
 
-use App\Validator\Product\PriceConstraintValidator;
-use App\Validator\Product\CodeConstraintValidator;
 use App\Repository\ProductRepository;
+use App\Validator\Product\CodeConstraintValidator;
+use App\Validator\Product\PriceConstraintValidator;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -16,7 +16,7 @@ class Product
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['show_products','show_product', 'edit_product'])]
+    #[Groups(['show_products', 'show_product', 'edit_product'])]
     private $id;
 
     #[ORM\Column(length: 10, nullable: false)]
@@ -25,11 +25,11 @@ class Product
     private string $code;
 
     #[ORM\Column(type: Types::TEXT, nullable: false)]
-    #[Groups(['show_products','show_product', 'edit_product', 'create_product'])]
+    #[Groups(['show_products', 'show_product', 'edit_product', 'create_product'])]
     private string $description;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2, nullable: false)]
-    #[Groups(['show_products','show_product', 'edit_product', 'create_product'])]
+    #[Groups(['show_products', 'show_product', 'edit_product', 'create_product'])]
     #[PriceConstraintValidator]
     private string $price;
 
@@ -62,6 +62,7 @@ class Product
     public function setCode(string $code): self
     {
         $this->code = $code;
+
         return $this;
     }
 
@@ -73,6 +74,7 @@ class Product
     public function setDescription(string $description): self
     {
         $this->description = $description;
+
         return $this;
     }
 
@@ -84,6 +86,7 @@ class Product
     public function setPrice(string $price): self
     {
         $this->price = $price;
+
         return $this;
     }
 
@@ -91,7 +94,6 @@ class Product
     {
         return $this->supplier;
     }
-
 
     public function setSupplier(?Supplier $supplier): self
     {
@@ -104,7 +106,6 @@ class Product
     {
         return $this->type;
     }
-
 
     public function setType(?Type $type): self
     {
@@ -130,7 +131,6 @@ class Product
         return $this->updatedAt;
     }
 
-
     public function setUpdatedAt(\DateTimeImmutable $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
@@ -143,10 +143,8 @@ class Product
     public function updatedTimestamps(): void
     {
         $this->setUpdatedAt(new \DateTimeImmutable('now'));
-        if ($this->getCreatedAt() === null) {
+        if (null === $this->getCreatedAt()) {
             $this->setCreatedAt(new \DateTimeImmutable('now'));
         }
     }
-
-
 }

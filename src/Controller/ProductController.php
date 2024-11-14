@@ -7,7 +7,6 @@ use App\Entity\Product;
 use App\Repository\ProductRepository;
 use App\Repository\SupplierRepository;
 use App\Repository\TypeRepository;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -15,9 +14,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
-use Symfony\Component\Serializer\SerializerInterface;
-
 
 class ProductController extends AbstractController
 {
@@ -26,9 +22,8 @@ class ProductController extends AbstractController
         Request $request,
         ProductRepository $productRepository,
         #[MapQueryString]
-        PaginationDTO $paginationDTO,
-    ): JsonResponse
-    {
+        paginationDTO $paginationDTO,
+    ): JsonResponse {
         $products = $productRepository->paginateProducts($paginationDTO->page);
         $groups = $request->query->all('groups');
 
@@ -39,9 +34,8 @@ class ProductController extends AbstractController
     public function getProduct(
         Product $productId,
         Request $request,
-        ProductRepository $productRepository
-    ): JsonResponse
-    {
+        ProductRepository $productRepository,
+    ): JsonResponse {
         $product = $productRepository->find($productId);
         $groups = $request->query->all('groups');
 
@@ -54,13 +48,11 @@ class ProductController extends AbstractController
         Request $request,
         EntityManagerInterface $entityManager,
         ProductRepository $productRepository,
-        TypeRepository $typeRepository
-    ): JsonResponse
-    {
-
+        TypeRepository $typeRepository,
+    ): JsonResponse {
         $content = json_decode($request->getContent());
         $groups = $request->query->all('groups');
-        $type= $typeRepository->find($content->type);
+        $type = $typeRepository->find($content->type);
 
         $product = $productRepository->find($productId);
         $product->setType($type);
@@ -68,7 +60,6 @@ class ProductController extends AbstractController
         $entityManager->flush();
 
         return $this->json($product, 200, [], ['groups' => $groups]);
-
     }
 
     #[Route('/products', name: 'create_products', methods: ['POST'])]
@@ -77,14 +68,13 @@ class ProductController extends AbstractController
         EntityManagerInterface $entityManager,
         #[MapRequestPayload(
             serializationContext: [
-                'groups' => ['create_product']
+                'groups' => ['create_product'],
             ]
         )]
         Product $product,
         TypeRepository $typeRepository,
-        SupplierRepository  $supplierRepository,
-    ): JsonResponse
-    {
+        SupplierRepository $supplierRepository,
+    ): JsonResponse {
         $content = json_decode($request->getContent());
         $type = $typeRepository->find($content->type);
         $supplier = $supplierRepository->find($content->supplier);

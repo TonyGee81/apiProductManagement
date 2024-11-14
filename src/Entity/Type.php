@@ -2,8 +2,8 @@
 
 namespace App\Entity;
 
-use App\Validator\Product\TypeConstraintValidator;
 use App\Repository\TypeRepository;
+use App\Validator\Product\TypeConstraintValidator;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -58,6 +58,7 @@ class Type
     public function setName(string $name): self
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -107,7 +108,6 @@ class Type
         return $this->updatedAt;
     }
 
-
     public function setUpdatedAt(\DateTimeImmutable $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
@@ -120,10 +120,8 @@ class Type
     public function updatedTimestamps(): void
     {
         $this->setUpdatedAt(new \DateTimeImmutable('now'));
-        if ($this->getCreatedAt() === null) {
+        if (null === $this->getCreatedAt()) {
             $this->setCreatedAt(new \DateTimeImmutable('now'));
         }
     }
-
-
 }

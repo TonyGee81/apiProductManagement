@@ -6,7 +6,6 @@ use App\Entity\Supplier;
 use App\Message\ProductImportMessage;
 use App\Repository\SupplierRepository;
 use App\Service\GetFileContentService;
-use App\Service\ImportCsvService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -27,8 +26,7 @@ class ImportController extends AbstractController
         GetFileContentService $getFileContentService,
         SupplierRepository $supplierRepository,
         MessageBusInterface $bus,
-    ): JsonResponse
-    {
+    ): JsonResponse {
         $supplierData = $request->request->get('supplier');
         /** @var Supplier $supplier */
         $supplier = $supplierRepository->find($supplierData);
