@@ -33,6 +33,9 @@ class Product
     #[Groups([self::GROUP_CREATE, self::GROUP_EDIT, self::GROUP_SHOW_ALL, self::GROUP_SHOW_ONE])]
     private ?string $name = null;
 
+    #[ORM\Column(type: Types::TEXT, nullable: false)]
+    private string $slug;
+
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Groups([self::GROUP_CREATE, self::GROUP_EDIT, self::GROUP_SHOW_ALL, self::GROUP_SHOW_ONE])]
     private ?string $country = null;
@@ -91,6 +94,18 @@ class Product
     public function setName(?string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getSlug(): string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
 
         return $this;
     }

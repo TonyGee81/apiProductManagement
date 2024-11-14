@@ -18,7 +18,7 @@ final class Version20241114111306 extends AbstractMigration
     {
         $this->addSql('ALTER TABLE product ADD name TEXT DEFAULT NULL');
         $this->addSql('ALTER TABLE product ADD country TEXT DEFAULT NULL');
-        $this->addSql('ALTER TABLE product ADD is_european_union BOOLEAN');
+        $this->addSql('ALTER TABLE product ADD is_european_union BOOLEAN NOT NULL');
         $this->addSql('ALTER TABLE product ALTER supplier_id DROP NOT NULL');
         $this->addSql('ALTER TABLE product ALTER description DROP NOT NULL');
     }

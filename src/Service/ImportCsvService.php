@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Entity\Product;
 use App\Entity\Supplier;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\String\Slugger\AsciiSlugger;
 
 readonly class ImportCsvService
 {
@@ -24,6 +25,8 @@ readonly class ImportCsvService
 
         $europeanProduct = $isEuropean ?? false;
         $productCountry = $country ?? null;
+        $slugger = new AsciiSlugger();
+        $slug = $slugger->slug($name .$description);
 
         $product
             ->setIsEuropeanUnion($europeanProduct)
@@ -33,6 +36,7 @@ readonly class ImportCsvService
             ->setDescription($description)
             ->setPrice($price)
             ->setName($name)
+            ->setSlug($slug)
         ;
 
         $supplier
