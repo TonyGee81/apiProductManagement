@@ -13,7 +13,7 @@ readonly class ImportCsvService
     ) {
     }
 
-    public function import(string $code, string $description, string $price, string $supplierId): void
+    public function import(?int $isEuropean, ?string $country, string $code, string $description, string $price, string $supplierId, string $name): void
     {
         $product = $this->entityManager->getRepository(Product::class)->findOneBy(['code' => $code, 'supplier' => $supplierId]);
         $supplier = $this->entityManager->getRepository(Supplier::class)->find($supplierId);
@@ -22,11 +22,18 @@ readonly class ImportCsvService
             $product = new Product();
         }
 
+        $europeanProduct = $isEuropean ?? false;
+        $productCountry = $country ?? null;
+
         $product
+            ->setIsEuropeanUnion($europeanProduct)
+            ->setCountry($productCountry)
             ->setCode($code)
             ->setSupplier($supplier)
             ->setDescription($description)
-            ->setPrice($price);
+            ->setPrice($price)
+            ->setName($name)
+        ;
 
         $supplier
             ->addProduct($product);

@@ -12,11 +12,14 @@ class GetFileContentService
 
         $csvData = [];
 
-        while (($data = fgetcsv($handle)) !== false) {
+        while (($data = fgetcsv($handle, null, ';')) !== false) {
             $csvData[] = [
-                'code' => $data[1],
-                'description' => $data[0],
-                'price' => $data[2],
+                'isEuropean' => intval($data[0]),
+                'country' => $data[1],
+                'name' => $data[2],
+                'description' => $data[3],
+                'code' => $data[4],
+                'price' => $data[5],
             ];
         }
 

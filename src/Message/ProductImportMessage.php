@@ -2,14 +2,27 @@
 
 namespace App\Message;
 
-class ProductImportMessage
+readonly class ProductImportMessage
 {
     public function __construct(
-        private readonly string $code,
-        private readonly string $description,
-        private readonly string $price,
-        private readonly string $supplierId,
+        private ?int $isEuropean,
+        private ?string $country,
+        private string $code,
+        private string $description,
+        private float $price,
+        private string $supplierId,
+        private string $name,
     ) {
+    }
+
+    public function getIsEuropean(): ?int
+    {
+        return $this->isEuropean;
+    }
+
+    public function getCountry(): ?string
+    {
+        return $this->country;
     }
 
     public function getCode(): string
@@ -22,7 +35,7 @@ class ProductImportMessage
         return $this->description;
     }
 
-    public function getPrice(): string
+    public function getPrice(): float
     {
         return $this->price;
     }
@@ -30,5 +43,10 @@ class ProductImportMessage
     public function getSupplierId(): string
     {
         return $this->supplierId;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
     }
 }

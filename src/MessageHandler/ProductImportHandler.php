@@ -16,6 +16,6 @@ readonly class ProductImportHandler
 
     public function __invoke(ProductImportMessage $message): void
     {
-        $this->importCsvService->import($message->getCode(), $message->getDescription(), $message->getPrice(), $message->getSupplierId());
+        $this->importCsvService->import($message->getIsEuropean(), $message->getCountry(), $message->getCode(), $message->getDescription(), $message->getPrice(), $message->getSupplierId(), $message->getName());
     }
 }
