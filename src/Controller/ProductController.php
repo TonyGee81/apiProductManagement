@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\DTO\paginationDTO;
 use App\Entity\Product;
 use App\Repository\ProductRepository;
 use App\Repository\SupplierRepository;
@@ -11,6 +12,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
@@ -22,10 +24,12 @@ class ProductController extends AbstractController
     #[Route('/products', name: 'show_products', methods: ['GET'])]
     public function getProducts(
         Request $request,
-        ProductRepository $productRepository
+        ProductRepository $productRepository,
+        #[MapQueryString]
+        PaginationDTO $paginationDTO,
     ): JsonResponse
     {
-        $products = $productRepository->paginateProducts($request->query->getInt('page', 1));
+        $products = $productRepository->paginateProducts($paginationDTO->page);
         $groups = $request->query->all('groups');
 
         return $this->json($products, 200, [], ['groups' => $groups]);
