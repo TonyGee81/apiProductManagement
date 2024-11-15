@@ -11,7 +11,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: TypeRepository::class)]
 #[ORM\HasLifecycleCallbacks]
-class Type
+class Type extends CommonEntity
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

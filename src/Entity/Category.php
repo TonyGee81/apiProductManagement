@@ -12,7 +12,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
 #[ORM\HasLifecycleCallbacks]
-class Category
+class Category extends CommonEntity implements EntytyInterface
 {
     private const GROUP_CREATE = 'create_category';
     private const GROUP_EDIT = 'edit_category';

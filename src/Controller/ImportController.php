@@ -34,7 +34,16 @@ class ImportController extends AbstractController
         $file = $request->files->get('csv');
         $data = $getFileContentService->getCSVContent($file->getPathname());
         foreach ($data as $row) {
-            $bus->dispatch(new ProductImportMessage($row['isEuropean'], $row['country'], $row['name'], $row['category'], $row['description'], $row['code'], $row['price'], $supplier->getId()));
+            $bus->dispatch(new ProductImportMessage(
+                $row['isEuropean'],
+                $row['country'],
+                $row['name'],
+                $row['category'],
+                $row['description'],
+                $row['code'],
+                $row['price'],
+                $supplier->getId())
+            );
         }
 
         return $this->json([

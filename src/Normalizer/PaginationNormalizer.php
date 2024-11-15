@@ -2,7 +2,7 @@
 
 namespace App\Normalizer;
 
-use App\Entity\Product;
+use App\Entity\EntytyInterface;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -22,7 +22,7 @@ class PaginationNormalizer implements NormalizerInterface
         }
 
         return [
-            'items' => array_map(fn (Product $recipe) => $this->normalizer->normalize($recipe, $format, $context), $object->getItems()),
+            'items' => array_map(fn (EntytyInterface $entity) => $this->normalizer->normalize($entity, $format, $context), $object->getItems()),
             'total' => $object->getTotalItemCount(),
             'page' => $object->getCurrentPageNumber(),
             'lastPage' => ceil($object->getTotalItemCount() / $object->getItemNumberPerPage()),

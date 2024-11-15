@@ -10,7 +10,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: SupplierRepository::class)]
 #[ORM\HasLifecycleCallbacks]
-class Supplier
+class Supplier extends CommonEntity
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
