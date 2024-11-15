@@ -9,13 +9,13 @@ use Doctrine\Persistence\ObjectManager;
 
 class CategoryFixtures extends Fixture
 {
-
-    public function __construct(private SlugService $slugService){}
+    public function __construct(private SlugService $slugService)
+    {
+    }
 
     public function load(
-        ObjectManager $manager
-    ): void
-    {
+        ObjectManager $manager,
+    ): void {
         $categories = [
             'Crème fraîche',
             'Lait fermenté',
