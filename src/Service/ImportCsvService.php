@@ -37,7 +37,7 @@ readonly class ImportCsvService
 
         $europeanProduct = $isEuropean ?? false;
         $productCountry = $country ?? null;
-        $slug = $this->slugService->slugify($name.'-'.$description);
+        //        $slug = $this->slugService->slugify($name.'-'.$description);
 
         $slugCategory = $this->slugService->slugify($categoryName);
         $category = $this->entityManager->getRepository(Category::class)->findOneBy(['slug' => $slugCategory]);
@@ -59,7 +59,7 @@ readonly class ImportCsvService
             ->setDescription($description)
             ->setPrice($price)
             ->setName($name)
-            ->setSlug($slug)
+//            ->setSlug($slug)
             ->setCategory($category ?? null)
         ;
 

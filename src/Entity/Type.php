@@ -2,6 +2,10 @@
 
 namespace App\Entity;
 
+use App\Entity\Interface\EntityInterface;
+use App\Entity\Interface\SlugInterface;
+use App\Entity\Trait\SluggeableTrait;
+use App\Entity\Trait\TimestampableTrait;
 use App\Repository\TypeRepository;
 use App\Validator\Product\TypeConstraintValidator;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -11,8 +15,16 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: TypeRepository::class)]
 #[ORM\HasLifecycleCallbacks]
-class Type extends CommonEntity
+class Type implements EntityInterface, SlugInterface
 {
+    use TimestampableTrait;
+    use SluggeableTrait;
+
+    private const GROUP_CREATE = 'create_type';
+    private const GROUP_EDIT = 'edit_type';
+    private const GROUP_SHOW_ALL = 'show_types';
+    private const GROUP_SHOW_ONE = 'show_type';
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -20,7 +32,7 @@ class Type extends CommonEntity
 
     #[ORM\Column(length: 10, nullable: false)]
     #[TypeConstraintValidator]
-    #[Groups(['show_product', 'edit_product'])]
+    #[Groups([self::GROUP_CREATE, self::GROUP_EDIT, self::GROUP_SHOW_ALL, self::GROUP_SHOW_ONE])]
     private string $name;
 
     /**

@@ -2,6 +2,10 @@
 
 namespace App\Entity;
 
+use App\Entity\Interface\EntityInterface;
+use App\Entity\Interface\SlugInterface;
+use App\Entity\Trait\SluggeableTrait;
+use App\Entity\Trait\TimestampableTrait;
 use App\Repository\ProductRepository;
 use App\Validator\Product\CodeConstraintValidator;
 use App\Validator\Product\PriceConstraintValidator;
@@ -11,8 +15,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 #[ORM\HasLifecycleCallbacks]
-class Product extends CommonEntity
+class Product implements EntityInterface, SlugInterface
 {
+    use TimestampableTrait;
+    use SluggeableTrait;
+
     private const GROUP_CREATE = 'create_product';
     private const GROUP_EDIT = 'edit_product';
     private const GROUP_SHOW_ALL = 'show_products';

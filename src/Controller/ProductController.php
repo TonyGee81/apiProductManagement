@@ -42,8 +42,8 @@ class ProductController extends AbstractController
         return $this->json($product, 200, [], ['groups' => $groups]);
     }
 
-    #[Route('/products/{productId}', name: 'edit_products', methods: ['PATCH'])]
-    public function editProduct(
+    #[Route('/products/{productId}', name: 'edit_product', methods: ['PATCH'])]
+    public function edit(
         Product $productId,
         Request $request,
         EntityManagerInterface $entityManager,

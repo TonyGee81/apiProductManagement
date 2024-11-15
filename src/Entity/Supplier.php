@@ -2,6 +2,10 @@
 
 namespace App\Entity;
 
+use App\Entity\Interface\EntityInterface;
+use App\Entity\Interface\SlugInterface;
+use App\Entity\Trait\SluggeableTrait;
+use App\Entity\Trait\TimestampableTrait;
 use App\Repository\SupplierRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -10,16 +14,24 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: SupplierRepository::class)]
 #[ORM\HasLifecycleCallbacks]
-class Supplier extends CommonEntity
+class Supplier implements EntityInterface, SlugInterface
 {
+    use TimestampableTrait;
+    use SluggeableTrait;
+
+    private const GROUP_CREATE = 'create_supplier';
+    private const GROUP_EDIT = 'edit_supplier';
+    private const GROUP_SHOW_ALL = 'show_suppliers';
+    private const GROUP_SHOW_ONE = 'show_supplier';
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['show_products', 'show_product', 'edit_product'])]
+    #[Groups([self::GROUP_SHOW_ALL,  self::GROUP_SHOW_ONE, self::GROUP_EDIT])]
     private $id;
 
     #[ORM\Column(length: 255, nullable: false)]
-    #[Groups(['show_product', 'edit_product'])]
+    #[Groups([self::GROUP_CREATE, self::GROUP_EDIT, self::GROUP_SHOW_ALL, self::GROUP_SHOW_ONE])]
     private string $name;
 
     /**

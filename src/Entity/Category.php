@@ -2,8 +2,11 @@
 
 namespace App\Entity;
 
+use App\Entity\Interface\EntityInterface;
+use App\Entity\Interface\SlugInterface;
+use App\Entity\Trait\SluggeableTrait;
+use App\Entity\Trait\TimestampableTrait;
 use App\Repository\CategoryRepository;
-use App\Service\SlugService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -12,8 +15,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
 #[ORM\HasLifecycleCallbacks]
-class Category extends CommonEntity implements EntytyInterface
+class Category implements EntityInterface, SlugInterface
 {
+    use TimestampableTrait;
+    use SluggeableTrait;
+
     private const GROUP_CREATE = 'create_category';
     private const GROUP_EDIT = 'edit_category';
     private const GROUP_SHOW_ALL = 'show_categories';
@@ -29,21 +35,15 @@ class Category extends CommonEntity implements EntytyInterface
     #[Groups([self::GROUP_CREATE, self::GROUP_EDIT, self::GROUP_SHOW_ALL, self::GROUP_SHOW_ONE])]
     private ?string $name = null;
 
-    #[ORM\Column(type: Types::TEXT, nullable: false)]
-    private string $slug;
-
     /**
      * @var Collection<int, Type>
      */
     #[ORM\OneToMany(targetEntity: Product::class, mappedBy: 'type', orphanRemoval: true)]
     private Collection $products;
 
-    private SlugService $slugService;
-
     public function __construct()
     {
         $this->products = new ArrayCollection();
-        $this->slugService = new SlugService();
     }
 
     public function getName(): ?string
@@ -54,18 +54,6 @@ class Category extends CommonEntity implements EntytyInterface
     public function setName(?string $name): self
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    public function getSlug(): string
-    {
-        return $this->slug;
-    }
-
-    public function setSlug(string $slug): self
-    {
-        $this->slug = $slug;
 
         return $this;
     }
@@ -97,11 +85,5 @@ class Category extends CommonEntity implements EntytyInterface
         }
 
         return $this;
-    }
-
-    #[ORM\PrePersist]
-    public function createSlug(): void
-    {
-        $this->slug = $this->slugService->slugify($this->name);
     }
 }

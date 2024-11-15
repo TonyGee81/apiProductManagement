@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Trait;
 
 use Doctrine\ORM\Mapping as ORM;
 
-class CommonEntity
+trait TimestampableTrait
 {
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
