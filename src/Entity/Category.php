@@ -38,11 +38,6 @@ class Category
     #[ORM\OneToMany(targetEntity: Product::class, mappedBy: 'type', orphanRemoval: true)]
     private Collection $products;
 
-    #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
-
-    #[ORM\Column]
-    private ?\DateTimeImmutable $updatedAt = null;
     private SlugService $slugService;
 
     public function __construct()
@@ -102,40 +97,6 @@ class Category
         }
 
         return $this;
-    }
-
-    public function getCreatedAt(): ?\DateTimeImmutable
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(\DateTimeImmutable $createdAt): self
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    public function getUpdatedAt(): ?\DateTimeImmutable
-    {
-        return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(\DateTimeImmutable $updatedAt): self
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
-    #[ORM\PrePersist]
-    #[ORM\PreUpdate]
-    public function updatedTimestamps(): void
-    {
-        $this->setUpdatedAt(new \DateTimeImmutable('now'));
-        if (null === $this->getCreatedAt()) {
-            $this->setCreatedAt(new \DateTimeImmutable('now'));
-        }
     }
 
     #[ORM\PrePersist]

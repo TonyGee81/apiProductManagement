@@ -28,12 +28,6 @@ class Supplier
     #[ORM\OneToMany(targetEntity: Product::class, mappedBy: 'supplier', orphanRemoval: true)]
     private Collection $products;
 
-    #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
-
-    #[ORM\Column]
-    private ?\DateTimeImmutable $updatedAt = null;
-
     public function __construct()
     {
         $this->products = new ArrayCollection();
@@ -83,39 +77,5 @@ class Supplier
         }
 
         return $this;
-    }
-
-    public function getCreatedAt(): ?\DateTimeImmutable
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(\DateTimeImmutable $createdAt): static
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    public function getUpdatedAt(): ?\DateTimeImmutable
-    {
-        return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
-    #[ORM\PrePersist]
-    #[ORM\PreUpdate]
-    public function updatedTimestamps(): void
-    {
-        $this->setUpdatedAt(new \DateTimeImmutable('now'));
-        if (null === $this->getCreatedAt()) {
-            $this->setCreatedAt(new \DateTimeImmutable('now'));
-        }
     }
 }

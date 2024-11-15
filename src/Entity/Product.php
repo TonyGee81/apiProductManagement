@@ -11,7 +11,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 #[ORM\HasLifecycleCallbacks]
-class Product
+class Product extends CommonEntity
 {
     private const GROUP_CREATE = 'create_product';
     private const GROUP_EDIT = 'edit_product';
@@ -67,12 +67,6 @@ class Product
     #[Groups([self::GROUP_CREATE, self::GROUP_EDIT, self::GROUP_SHOW_ONE])]
     #[ORM\JoinColumn(nullable: true)]
     private ?Category $category = null;
-
-    #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
-
-    #[ORM\Column]
-    private ?\DateTimeImmutable $updatedAt = null;
 
     public function getId()
     {
@@ -197,39 +191,5 @@ class Product
         $this->category = $category;
 
         return $this;
-    }
-
-    public function getCreatedAt(): ?\DateTimeImmutable
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(\DateTimeImmutable $createdAt): self
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    public function getUpdatedAt(): ?\DateTimeImmutable
-    {
-        return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(\DateTimeImmutable $updatedAt): self
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
-    #[ORM\PrePersist]
-    #[ORM\PreUpdate]
-    public function updatedTimestamps(): void
-    {
-        $this->setUpdatedAt(new \DateTimeImmutable('now'));
-        if (null === $this->getCreatedAt()) {
-            $this->setCreatedAt(new \DateTimeImmutable('now'));
-        }
     }
 }
