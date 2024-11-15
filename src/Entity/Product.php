@@ -21,7 +21,7 @@ class Product
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['show_products', 'show_product', self::GROUP_EDIT])]
+    #[Groups([self::GROUP_SHOW_ALL,  self::GROUP_SHOW_ONE, self::GROUP_EDIT])]
     private $id;
 
     #[ORM\Column(length: 10, nullable: false)]
@@ -62,6 +62,11 @@ class Product
     #[Groups([self::GROUP_CREATE, self::GROUP_EDIT, self::GROUP_SHOW_ONE])]
     #[ORM\JoinColumn(nullable: true)]
     private ?Type $type = null;
+
+    #[ORM\ManyToOne(inversedBy: 'products')]
+    #[Groups([self::GROUP_CREATE, self::GROUP_EDIT, self::GROUP_SHOW_ONE])]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Category $category = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
@@ -178,6 +183,18 @@ class Product
     public function setType(?Type $type): self
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): self
+    {
+        $this->category = $category;
 
         return $this;
     }

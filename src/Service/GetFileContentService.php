@@ -17,9 +17,10 @@ class GetFileContentService
                 'isEuropean' => intval($data[0]),
                 'country' => $data[1],
                 'name' => $data[2],
-                'description' => $data[3],
-                'code' => $data[4],
-                'price' => $data[5],
+                'category' => $data[3],
+                'description' => $data[4],
+                'code' => $data[5],
+                'price' => $data[6],
             ];
         }
 

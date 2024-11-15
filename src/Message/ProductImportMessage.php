@@ -7,11 +7,12 @@ readonly class ProductImportMessage
     public function __construct(
         private ?int $isEuropean,
         private ?string $country,
-        private string $code,
+        private string $name,
+        private string $category,
         private string $description,
+        private string $code,
         private float $price,
         private string $supplierId,
-        private string $name,
     ) {
     }
 
@@ -25,14 +26,24 @@ readonly class ProductImportMessage
         return $this->country;
     }
 
-    public function getCode(): string
+    public function getName(): string
     {
-        return $this->code;
+        return $this->name;
+    }
+
+    public function getCategory(): string
+    {
+        return $this->category;
     }
 
     public function getDescription(): string
     {
         return $this->description;
+    }
+
+    public function getCode(): string
+    {
+        return $this->code;
     }
 
     public function getPrice(): float
@@ -43,10 +54,5 @@ readonly class ProductImportMessage
     public function getSupplierId(): string
     {
         return $this->supplierId;
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
     }
 }

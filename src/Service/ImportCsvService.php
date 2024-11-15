@@ -2,21 +2,33 @@
 
 namespace App\Service;
 
+use App\Entity\Category;
 use App\Entity\Product;
 use App\Entity\Supplier;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\String\Slugger\AsciiSlugger;
 
 readonly class ImportCsvService
 {
     public function __construct(
         private EntityManagerInterface $entityManager,
+        private SlugService $slugService,
     ) {
     }
 
-    public function import(?int $isEuropean, ?string $country, string $code, string $description, string $price, string $supplierId, string $name): void
-    {
-        $product = $this->entityManager->getRepository(Product::class)->findOneBy(['code' => $code, 'supplier' => $supplierId]);
+    public function import(
+        ?int $isEuropean,
+        ?string $country,
+        string $code,
+        string $description,
+        string $price,
+        string $supplierId,
+        string $name,
+        string $categoryName,
+    ): void {
+        $product = $this->entityManager->getRepository(Product::class)->findOneBy([
+            'code' => $code,
+            'supplier' => $supplierId,
+        ]);
         $supplier = $this->entityManager->getRepository(Supplier::class)->find($supplierId);
 
         if (!$product) {
@@ -25,8 +37,19 @@ readonly class ImportCsvService
 
         $europeanProduct = $isEuropean ?? false;
         $productCountry = $country ?? null;
-        $slugger = new AsciiSlugger();
-        $slug = $slugger->slug($name .$description);
+        $slug = $this->slugService->slugify($name.'-'.$description);
+
+        $slugCategory = $this->slugService->slugify($categoryName);
+        $category = $this->entityManager->getRepository(Category::class)->findOneBy(['slug' => $slugCategory]);
+
+        if ('' !== $categoryName && !$category) {
+            $category = (new Category())->setName($categoryName);
+            $this->entityManager->persist($category);
+            $this->entityManager->flush();
+
+            $category
+                ->addProduct($product);
+        }
 
         $product
             ->setIsEuropeanUnion($europeanProduct)
@@ -37,6 +60,7 @@ readonly class ImportCsvService
             ->setPrice($price)
             ->setName($name)
             ->setSlug($slug)
+            ->setCategory($category ?? null)
         ;
 
         $supplier
