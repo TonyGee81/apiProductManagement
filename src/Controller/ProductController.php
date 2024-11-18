@@ -14,7 +14,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[Route('/api', name: 'api_')]
+#[IsGranted('ROLE_ADMIN')]
 class ProductController extends AbstractController
 {
     #[Route('/products', name: 'show_products', methods: ['GET'])]

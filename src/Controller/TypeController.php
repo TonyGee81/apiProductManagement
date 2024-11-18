@@ -11,7 +11,10 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[Route('/api', name: 'api_')]
+#[IsGranted('ROLE_ADMIN')]
 class TypeController extends AbstractController
 {
     #[Route('/suppliers/{supplierId}', name: 'edit_supplier', methods: ['PATCH'])]

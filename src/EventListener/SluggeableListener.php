@@ -24,11 +24,12 @@ class SluggeableListener
     public function prePersist(PrePersistEventArgs $args): void
     {
         $entity = $args->getObject();
-        $name = $entity->getName();
 
         if (!$entity instanceof SlugInterface) {
             return;
         }
+
+        $name = $entity->getName();
 
         if ($entity instanceof Product) {
             $name .= '-'.$entity->getDescription();
@@ -40,11 +41,12 @@ class SluggeableListener
     public function preUpdate(PreUpdateEventArgs $args): void
     {
         $entity = $args->getObject();
-        $name = $entity->getName();
 
         if (!$entity instanceof SlugInterface) {
             return;
         }
+
+        $name = $entity->getName();
 
         if ($entity instanceof Product) {
             $name .= '-'.$entity->getDescription();

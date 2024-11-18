@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
 
+#[Route('/api', name: 'api_')]
 class CategoryController extends AbstractController
 {
     #[Route('/categories', name: 'show_categories', methods: ['GET'])]

@@ -13,8 +13,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Messenger\Exception\ExceptionInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route('/import', name: 'import')]
+#[Route('/api/import', name: 'api_import')]
+#[IsGranted('ROLE_ADMIN')]
 class ImportController extends AbstractController
 {
     /**
