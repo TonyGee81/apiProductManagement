@@ -36,7 +36,7 @@ readonly class ImportCsvService
         }
 
         $europeanProduct = $isEuropean ?? false;
-        $productCountry = $country ?? null;-
+        $productCountry = $country ?? null;
 
         $slugCategory = $this->slugService->slugify($categoryName);
         $category = $this->entityManager->getRepository(Category::class)->findOneBy(['slug' => $slugCategory]);
