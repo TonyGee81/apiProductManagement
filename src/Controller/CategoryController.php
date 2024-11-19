@@ -6,14 +6,13 @@ use App\DTO\paginationDTO;
 use App\Entity\Category;
 use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/api', name: 'api_')]
-class CategoryController extends AbstractController
+class CategoryController extends ApiController
 {
     #[Route('/categories', name: 'show_categories', methods: ['GET'])]
     public function getCategories(
@@ -24,7 +23,7 @@ class CategoryController extends AbstractController
         $categories = $categoryRepository->paginateCategories($paginationDTO->page);
         $groups = $request->query->all('groups');
 
-        return $this->json($categories, 200, [], ['groups' => $groups]);
+        return $this->response($categories, $groups);
     }
 
     #[Route('/categories/{categoryId}', name: 'show_category', methods: ['GET'])]
@@ -36,7 +35,7 @@ class CategoryController extends AbstractController
         $category = $categoryRepository->find($categoryId);
         $groups = $request->query->all('groups');
 
-        return $this->json($category, 200, [], ['groups' => $groups]);
+        return $this->response($category, $groups);
     }
 
     #[Route('/categories/{categoryId}', name: 'edit_category', methods: ['PATCH'])]
@@ -55,7 +54,7 @@ class CategoryController extends AbstractController
 
         $entityManager->flush();
 
-        return $this->json($category, 200, [], ['groups' => $groups]);
+        return $this->response($category, $groups);
     }
 
     #[Route('/categories', name: 'create_category', methods: ['POST'])]
@@ -72,6 +71,6 @@ class CategoryController extends AbstractController
         $entityManager->persist($category);
         $entityManager->flush();
 
-        return $this->json($category, 200, [], ['groups' => 'show_categories']);
+        return $this->response($category, ['show_categories']);
     }
 }

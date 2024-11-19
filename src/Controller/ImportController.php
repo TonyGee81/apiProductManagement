@@ -6,7 +6,6 @@ use App\Entity\Supplier;
 use App\Message\ProductImportMessage;
 use App\Repository\SupplierRepository;
 use App\Service\GetFileContentService;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,7 +16,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/api/import', name: 'api_import')]
 #[IsGranted('ROLE_ADMIN')]
-class ImportController extends AbstractController
+class ImportController extends ApiController
 {
     /**
      * @throws ExceptionInterface
@@ -48,11 +47,13 @@ class ImportController extends AbstractController
             );
         }
 
-        return $this->json([
+        $data = [
             'supplier' => $supplier->getName(),
             'data' => [
                 'total' => count($data),
             ],
-        ]);
+        ];
+
+        return $this->response($data, []);
     }
 }

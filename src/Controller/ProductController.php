@@ -8,7 +8,6 @@ use App\Repository\ProductRepository;
 use App\Repository\SupplierRepository;
 use App\Repository\TypeRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\MapQueryString;
@@ -18,7 +17,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/api', name: 'api_')]
 #[IsGranted('ROLE_ADMIN')]
-class ProductController extends AbstractController
+class ProductController extends ApiController
 {
     #[Route('/products', name: 'show_products', methods: ['GET'])]
     public function getProducts(
@@ -30,7 +29,7 @@ class ProductController extends AbstractController
         $products = $productRepository->paginateProducts($paginationDTO->page);
         $groups = $request->query->all('groups');
 
-        return $this->json($products, 200, [], ['groups' => $groups]);
+        return $this->response($products, $groups);
     }
 
     #[Route('/products/{productId}', name: 'show_product', methods: ['GET'])]
@@ -42,7 +41,7 @@ class ProductController extends AbstractController
         $product = $productRepository->find($productId);
         $groups = $request->query->all('groups');
 
-        return $this->json($product, 200, [], ['groups' => $groups]);
+        return $this->response($product, $groups);
     }
 
     #[Route('/products/{productId}', name: 'edit_product', methods: ['PATCH'])]
@@ -62,7 +61,7 @@ class ProductController extends AbstractController
 
         $entityManager->flush();
 
-        return $this->json($product, 200, [], ['groups' => $groups]);
+        return $this->response($product, $groups);
     }
 
     #[Route('/products', name: 'create_products', methods: ['POST'])]
@@ -90,6 +89,6 @@ class ProductController extends AbstractController
         $entityManager->persist($product);
         $entityManager->flush();
 
-        return $this->json($product, 200, [], ['groups' => 'show_products']);
+        return $this->response($product, ['show_products']);
     }
 }

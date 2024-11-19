@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\Type;
 use App\Repository\TypeRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
@@ -14,7 +13,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/api', name: 'api_')]
 #[IsGranted('ROLE_ADMIN')]
-class SupplierController extends AbstractController
+class SupplierController extends ApiController
 {
     #[Route('/types/{typeId}', name: 'edit_type', methods: ['PATCH'])]
     public function edit(
@@ -32,7 +31,7 @@ class SupplierController extends AbstractController
 
         $entityManager->flush();
 
-        return $this->json($type, 200, [], ['groups' => $groups]);
+        return $this->response($type, $groups);
     }
 
     #[Route('/types', name: 'create_type', methods: ['POST'])]
@@ -49,6 +48,6 @@ class SupplierController extends AbstractController
         $entityManager->persist($type);
         $entityManager->flush();
 
-        return $this->json($type, 200, [], ['groups' => 'show_types']);
+        return $this->response($type, ['show_types']);
     }
 }
