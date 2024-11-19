@@ -58,7 +58,6 @@ readonly class ImportCsvService
             ->setDescription($description)
             ->setPrice($price)
             ->setName($name)
-//            ->setSlug($slug)
             ->setCategory($category ?? null)
         ;
 
