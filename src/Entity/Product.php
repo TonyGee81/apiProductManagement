@@ -21,7 +21,7 @@ class Product implements EntityInterface, SlugInterface
     use SluggeableTrait;
 
     private const GROUP_CREATE = 'create_product';
-    private const GROUP_EDIT = 'edit_product';
+    public const GROUP_EDIT = 'edit_product';
     private const GROUP_SHOW_ALL = 'show_products';
     private const GROUP_SHOW_ONE = 'show_product';
 
@@ -64,11 +64,6 @@ class Product implements EntityInterface, SlugInterface
     #[Groups([self::GROUP_CREATE, self::GROUP_EDIT, self::GROUP_SHOW_ONE])]
     #[ORM\JoinColumn(nullable: true)]
     private ?Supplier $supplier = null;
-
-    #[ORM\ManyToOne(inversedBy: 'products')]
-    #[Groups([self::GROUP_CREATE, self::GROUP_EDIT, self::GROUP_SHOW_ONE])]
-    #[ORM\JoinColumn(nullable: true)]
-    private ?Type $type = null;
 
     #[ORM\ManyToOne(inversedBy: 'products')]
     #[Groups([self::GROUP_CREATE, self::GROUP_EDIT, self::GROUP_SHOW_ONE])]
@@ -172,18 +167,6 @@ class Product implements EntityInterface, SlugInterface
     public function setSupplier(?Supplier $supplier): self
     {
         $this->supplier = $supplier;
-
-        return $this;
-    }
-
-    public function getType(): ?Type
-    {
-        return $this->type;
-    }
-
-    public function setType(?Type $type): self
-    {
-        $this->type = $type;
 
         return $this;
     }

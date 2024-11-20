@@ -21,12 +21,17 @@ class ProductRepository extends ServiceEntityRepository
     public function paginateProducts(int $page): PaginationInterface
     {
         return $this->paginator->paginate(
-            $this->createQueryBuilder('p')->leftJoin('p.supplier', 's')->leftJoin('p.type', 't')->addSelect('s', 't'),
+            $this
+                ->createQueryBuilder('p')
+                ->leftJoin('p.supplier', 's')
+                ->leftJoin('p.type', 't')
+                ->addSelect('s', 't')
+                ->orderBy('p.name', 'ASC'),
             $page,
             20,
             [
                 'distinct' => true,
-                'sortFieldAllowList' => ['p.description'],
+                'sortFieldAllowList' => ['p.code'],
             ]
         );
     }

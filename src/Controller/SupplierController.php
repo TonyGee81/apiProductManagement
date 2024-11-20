@@ -2,11 +2,13 @@
 
 namespace App\Controller;
 
-use App\Entity\Type;
-use App\Repository\TypeRepository;
+use App\DTO\paginationDTO;
+use App\Entity\Supplier;
+use App\Repository\SupplierRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -15,39 +17,63 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_ADMIN')]
 class SupplierController extends ApiController
 {
-    #[Route('/types/{typeId}', name: 'edit_type', methods: ['PATCH'])]
+    #[Route('/suppliers', name: 'show_suppliers', methods: ['GET'])]
+    public function getSuppliers(
+        Request $request,
+        SupplierRepository $supplierRepository,
+        #[MapQueryString]
+        paginationDTO $paginationDTO,
+    ): JsonResponse {
+        $suppliers = $supplierRepository->paginateSuppliers($paginationDTO->page);
+        $groups = $request->query->all('groups');
+
+        return $this->response($suppliers, $groups);
+    }
+
+    #[Route('/suppliers/{supplierId}', name: 'show_supplier', methods: ['GET'])]
+    public function getCategory(
+        Supplier $supplierId,
+        Request $request,
+        SupplierRepository $supplierRepository,
+    ): JsonResponse {
+        $supplier = $supplierRepository->find($supplierId);
+        $groups = $request->query->all('groups');
+
+        return $this->response($supplier, $groups);
+    }
+
+    #[Route('/suppliers/{supplierId}', name: 'edit_supplier', methods: ['PATCH'])]
     public function edit(
-        Type $typeId,
+        Supplier $supplierId,
         Request $request,
         EntityManagerInterface $entityManager,
-        TypeRepository $typeRepository,
+        SupplierRepository $supplierRepository,
     ): JsonResponse {
         $content = json_decode($request->getContent());
         $groups = $request->query->all('groups');
 
-        $type = $typeRepository->find($typeId);
-        $type
+        $supplier = $supplierRepository->find($supplierId);
+        $supplier
             ->setName($content->name);
 
         $entityManager->flush();
 
-        return $this->response($type, $groups);
+        return $this->response($supplier, $groups);
     }
 
-    #[Route('/types', name: 'create_type', methods: ['POST'])]
+    #[Route('/suppliers', name: 'create_supplier', methods: ['POST'])]
     public function create(
-        Request $request,
         EntityManagerInterface $entityManager,
         #[MapRequestPayload(
             serializationContext: [
-                'groups' => ['create_type'],
+                'groups' => ['create_supplier'],
             ]
         )]
-        Type $type,
+        Supplier $supplier,
     ): JsonResponse {
-        $entityManager->persist($type);
+        $entityManager->persist($supplier);
         $entityManager->flush();
 
-        return $this->response($type, ['show_types']);
+        return $this->response($supplier, ['show_suppliers']);
     }
 }

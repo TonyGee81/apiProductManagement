@@ -8,16 +8,20 @@ use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/api', name: 'api_')]
+#[IsGranted('ROLE_ADMIN')]
 class CategoryController extends ApiController
 {
     #[Route('/categories', name: 'show_categories', methods: ['GET'])]
     public function getCategories(
         Request $request,
         CategoryRepository $categoryRepository,
+        #[MapQueryString]
         paginationDTO $paginationDTO,
     ): JsonResponse {
         $categories = $categoryRepository->paginateCategories($paginationDTO->page);
@@ -59,7 +63,6 @@ class CategoryController extends ApiController
 
     #[Route('/categories', name: 'create_category', methods: ['POST'])]
     public function create(
-        Request $request,
         EntityManagerInterface $entityManager,
         #[MapRequestPayload(
             serializationContext: [

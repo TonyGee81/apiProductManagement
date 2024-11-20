@@ -4,9 +4,9 @@ namespace App\Controller;
 
 use App\DTO\paginationDTO;
 use App\Entity\Product;
+use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
 use App\Repository\SupplierRepository;
-use App\Repository\TypeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -50,14 +50,26 @@ class ProductController extends ApiController
         Request $request,
         EntityManagerInterface $entityManager,
         ProductRepository $productRepository,
-        TypeRepository $typeRepository,
+        CategoryRepository $categoryRepository,
+        SupplierRepository $supplierRepository,
     ): JsonResponse {
         $content = json_decode($request->getContent());
         $groups = $request->query->all('groups');
-        $type = $typeRepository->find($content->type);
+        $category = $categoryRepository->find($content->category);
+        $supplier = $supplierRepository->find($content->supplier);
 
+        /** @var Product $product */
         $product = $productRepository->find($productId);
-        $product->setType($type);
+        $product
+            ->setSupplier($supplier)
+            ->setCode($content->code)
+            ->setDescription($content->description)
+            ->setPrice($content->price)
+            ->setName($content->name)
+            ->setCountry($content->country)
+            ->setIsEuropeanUnion($content->isEuropean)
+            ->setCategory($category)
+        ;
 
         $entityManager->flush();
 
@@ -74,15 +86,15 @@ class ProductController extends ApiController
             ]
         )]
         Product $product,
-        TypeRepository $typeRepository,
+        CategoryRepository $categoryRepository,
         SupplierRepository $supplierRepository,
     ): JsonResponse {
         $content = json_decode($request->getContent());
-        $type = $typeRepository->find($content->type);
+        $category = $categoryRepository->find($content->category);
         $supplier = $supplierRepository->find($content->supplier);
 
         $product
-            ->setType($type)
+            ->setCategory($category)
             ->setSupplier($supplier)
         ;
 

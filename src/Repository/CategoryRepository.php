@@ -21,12 +21,14 @@ class CategoryRepository extends ServiceEntityRepository
     public function paginateCategories(int $page): PaginationInterface
     {
         return $this->paginator->paginate(
-            $this->createQueryBuilder('c')->leftJoin('c.products', 'p')->addSelect('p'),
+            $this
+                ->createQueryBuilder('c')
+                ->orderBy('c.name', 'ASC'),
             $page,
             20,
             [
                 'distinct' => true,
-                'sortFieldAllowList' => ['p.name'],
+                'sortFieldAllowList' => ['c.name'],
             ]
         );
     }

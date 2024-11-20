@@ -32,7 +32,7 @@ class Category implements EntityInterface, SlugInterface
     private $id;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups([self::GROUP_CREATE, self::GROUP_EDIT, self::GROUP_SHOW_ALL, self::GROUP_SHOW_ONE])]
+    #[Groups([self::GROUP_CREATE, self::GROUP_EDIT, self::GROUP_SHOW_ALL, self::GROUP_SHOW_ONE, Product::GROUP_EDIT])]
     private ?string $name = null;
 
     /**
@@ -44,6 +44,11 @@ class Category implements EntityInterface, SlugInterface
     public function __construct()
     {
         $this->products = new ArrayCollection();
+    }
+
+    public function getId()
+    {
+        return $this->id;
     }
 
     public function getName(): ?string
