@@ -32,24 +32,21 @@ class ProductController extends ApiController
         return $this->response($products, $groups);
     }
 
-    #[Route('/products/{productId}', name: 'show_product', methods: ['GET'])]
+    #[Route('/products/{product}', name: 'show_product', methods: ['GET'])]
     public function getProduct(
-        Product $productId,
+        Product $product,
         Request $request,
-        ProductRepository $productRepository,
     ): JsonResponse {
-        $product = $productRepository->find($productId);
         $groups = $request->query->all('groups');
 
         return $this->response($product, $groups);
     }
 
-    #[Route('/products/{productId}', name: 'edit_product', methods: ['PATCH'])]
+    #[Route('/products/{product}', name: 'edit_product', methods: ['PATCH'])]
     public function edit(
-        Product $productId,
+        Product $product,
         Request $request,
         EntityManagerInterface $entityManager,
-        ProductRepository $productRepository,
         CategoryRepository $categoryRepository,
         SupplierRepository $supplierRepository,
     ): JsonResponse {
@@ -58,8 +55,6 @@ class ProductController extends ApiController
         $category = $categoryRepository->find($content->category);
         $supplier = $supplierRepository->find($content->supplier);
 
-        /** @var Product $product */
-        $product = $productRepository->find($productId);
         $product
             ->setSupplier($supplier)
             ->setCode($content->code)

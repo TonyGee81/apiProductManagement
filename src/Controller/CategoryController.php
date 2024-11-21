@@ -30,29 +30,25 @@ class CategoryController extends ApiController
         return $this->response($categories, $groups);
     }
 
-    #[Route('/categories/{categoryId}', name: 'show_category', methods: ['GET'])]
+    #[Route('/categories/{category}', name: 'show_category', methods: ['GET'])]
     public function getCategory(
-        Category $categoryId,
+        Category $category,
         Request $request,
-        CategoryRepository $categoryRepository,
     ): JsonResponse {
-        $category = $categoryRepository->find($categoryId);
         $groups = $request->query->all('groups');
 
         return $this->response($category, $groups);
     }
 
-    #[Route('/categories/{categoryId}', name: 'edit_category', methods: ['PATCH'])]
+    #[Route('/categories/{category}', name: 'edit_category', methods: ['PATCH'])]
     public function edit(
-        Category $categoryId,
+        Category $category,
         Request $request,
         EntityManagerInterface $entityManager,
-        CategoryRepository $categoryRepository,
     ): JsonResponse {
         $content = json_decode($request->getContent());
         $groups = $request->query->all('groups');
 
-        $category = $categoryRepository->find($categoryId);
         $category
             ->setName($content->name);
 

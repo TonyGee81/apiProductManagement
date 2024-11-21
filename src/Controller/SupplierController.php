@@ -30,29 +30,25 @@ class SupplierController extends ApiController
         return $this->response($suppliers, $groups);
     }
 
-    #[Route('/suppliers/{supplierId}', name: 'show_supplier', methods: ['GET'])]
+    #[Route('/suppliers/{supplier}', name: 'show_supplier', methods: ['GET'])]
     public function getCategory(
-        Supplier $supplierId,
+        Supplier $supplier,
         Request $request,
-        SupplierRepository $supplierRepository,
     ): JsonResponse {
-        $supplier = $supplierRepository->find($supplierId);
         $groups = $request->query->all('groups');
 
         return $this->response($supplier, $groups);
     }
 
-    #[Route('/suppliers/{supplierId}', name: 'edit_supplier', methods: ['PATCH'])]
+    #[Route('/suppliers/{supplier}', name: 'edit_supplier', methods: ['PATCH'])]
     public function edit(
-        Supplier $supplierId,
+        Supplier $supplier,
         Request $request,
         EntityManagerInterface $entityManager,
-        SupplierRepository $supplierRepository,
     ): JsonResponse {
         $content = json_decode($request->getContent());
         $groups = $request->query->all('groups');
 
-        $supplier = $supplierRepository->find($supplierId);
         $supplier
             ->setName($content->name);
 
