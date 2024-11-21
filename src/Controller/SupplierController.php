@@ -17,6 +17,8 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_ADMIN')]
 class SupplierController extends ApiController
 {
+    private const RESPONSE_404 = 'Supplier not found';
+
     #[Route('/suppliers', name: 'show_suppliers', methods: ['GET'])]
     public function getSuppliers(
         Request $request,
@@ -30,22 +32,33 @@ class SupplierController extends ApiController
         return $this->response($suppliers, $groups);
     }
 
-    #[Route('/suppliers/{supplier}', name: 'show_supplier', methods: ['GET'])]
+    #[Route('/suppliers/{supplierId}', name: 'show_supplier', methods: ['GET'])]
     public function getCategory(
-        Supplier $supplier,
+        int $supplierId,
         Request $request,
+        SupplierRepository $supplierRepository,
     ): JsonResponse {
+        if (!$supplier = $supplierRepository->find($supplierId)) {
+            return $this->responseNotFound(self::RESPONSE_404);
+        }
+
         $groups = $request->query->all('groups');
 
         return $this->response($supplier, $groups);
     }
 
-    #[Route('/suppliers/{supplier}', name: 'edit_supplier', methods: ['PATCH'])]
+    #[Route('/suppliers/{supplierId}', name: 'edit_supplier', methods: ['PATCH'])]
     public function edit(
-        Supplier $supplier,
+        int $supplierId,
         Request $request,
         EntityManagerInterface $entityManager,
+        SupplierRepository $supplierRepository,
     ): JsonResponse {
+
+        if (!$supplier = $supplierRepository->find($supplierId)) {
+            return $this->responseNotFound(self::RESPONSE_404);
+        }
+
         $content = json_decode($request->getContent());
         $groups = $request->query->all('groups');
 

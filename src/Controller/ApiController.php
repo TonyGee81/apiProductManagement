@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class ApiController extends AbstractController
@@ -42,15 +43,12 @@ class ApiController extends AbstractController
 
     public function response(mixed $data, array $groups, array $headers = []): JsonResponse
     {
-        $dataSerialzed = $this->serializer->serialize($data, 'json', ['groups' => $groups]);
+        $dataSerialized = $this->serializer->serialize($data, 'json', ['groups' => $groups]);
 
-        return new JsonResponse($dataSerialzed, $this->getStatusCode(), $headers, true);
+        return new JsonResponse($dataSerialized, $this->getStatusCode(), $headers, true);
     }
 
-    /**
-     * Sets an error message and returns a JSON response.
-     */
-    public function respondWithErrors(string $errors, array $headers = []): JsonResponse
+    public function responseWithErrors(string $errors, array $headers = []): JsonResponse
     {
         $data = [
             'status' => $this->getStatusCode(),
@@ -60,10 +58,7 @@ class ApiController extends AbstractController
         return new JsonResponse($data, $this->getStatusCode(), $headers);
     }
 
-    /**
-     * Sets an error message and returns a JSON response.
-     */
-    public function respondWithSuccess(string $success, array $headers = []): JsonResponse
+    public function responseWithSuccess(string $success, array $headers = []): JsonResponse
     {
         $data = [
             'status' => $this->getStatusCode(),
@@ -76,31 +71,31 @@ class ApiController extends AbstractController
     /**
      * Returns a 401 Unauthorized http response.
      */
-    public function respondUnauthorized(string $message = 'Not authorized!'): JsonResponse
+    public function responseUnauthorized(string $message = 'Not authorized!'): JsonResponse
     {
-        return $this->setStatusCode(401)->respondWithErrors($message);
+        return $this->setStatusCode(401)->responseWithErrors($message);
     }
 
     /**
      * Returns a 422 Unprocessable Entity.
      */
-    public function respondValidationError(string $message = 'Validation errors'): JsonResponse
+    public function responseValidationError(string $message = 'Validation errors'): JsonResponse
     {
-        return $this->setStatusCode(422)->respondWithErrors($message);
+        return $this->setStatusCode(422)->responseWithErrors($message);
     }
 
     /**
      * Returns a 404 Not Found.
      */
-    public function respondNotFound(string $message = 'Not found!'): JsonResponse
+    public function responseNotFound(string $message = 'Not found!'): JsonResponse
     {
-        return $this->setStatusCode(404)->respondWithErrors($message);
+        return $this->setStatusCode(404)->responseWithErrors($message);
     }
 
     /**
      * Returns a 201 Created.
      */
-    public function respondCreated(array $data, array $groups): JsonResponse
+    public function responseCreated(array $data, array $groups): JsonResponse
     {
         return $this->setStatusCode(201)->response($data, $groups);
     }
@@ -108,7 +103,7 @@ class ApiController extends AbstractController
     // this method allows us to accept JSON payloads in POST requests
     // since Symfony 4 doesn’t handle that automatically:
 
-    protected function transformJsonBody(\Symfony\Component\HttpFoundation\Request $request): \Symfony\Component\HttpFoundation\Request
+    protected function transformJsonBody(Request $request): Request
     {
         $data = json_decode($request->getContent(), true);
 

@@ -34,26 +34,32 @@ class ImportController extends ApiController
         /** @var UploadedFile $file */
         $file = $request->files->get('csv');
         $data = $getFileContentService->getCSVContent($file->getPathname());
-        foreach ($data as $row) {
-            $bus->dispatch(new ProductImportMessage(
-                $row['isEuropean'],
-                $row['country'],
-                $row['name'],
-                $row['category'],
-                $row['description'],
-                $row['code'],
-                $row['price'],
-                $supplier->getId())
-            );
+
+        try {
+            foreach ($data as $row) {
+                $bus->dispatch(new ProductImportMessage(
+                    $row['isEuropean'],
+                    $row['country'],
+                    $row['name'],
+                    $row['category'],
+                    $row['description'],
+                    $row['code'],
+                    $row['price'],
+                    $supplier->getId())
+                );
+            }
+
+            $data = [
+                'supplier' => $supplier->getName(),
+                'data' => [
+                    'total' => count($data),
+                ],
+            ];
+
+            return $this->response($data, []);
+
+        } catch (\Exception $ex) {
+            return $this->responseWithErrors($ex->getMessage());
         }
-
-        $data = [
-            'supplier' => $supplier->getName(),
-            'data' => [
-                'total' => count($data),
-            ],
-        ];
-
-        return $this->response($data, []);
     }
 }

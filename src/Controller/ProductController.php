@@ -19,6 +19,8 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_ADMIN')]
 class ProductController extends ApiController
 {
+    private const RESPONSE_404 = 'Product not found';
+
     #[Route('/products', name: 'show_products', methods: ['GET'])]
     public function getProducts(
         Request $request,
@@ -32,24 +34,34 @@ class ProductController extends ApiController
         return $this->response($products, $groups);
     }
 
-    #[Route('/products/{product}', name: 'show_product', methods: ['GET'])]
+    #[Route('/products/{productId}', name: 'show_product', methods: ['GET'])]
     public function getProduct(
-        Product $product,
+        int $productId,
         Request $request,
+        ProductRepository $productRepository,
     ): JsonResponse {
+        if (!$product = $productRepository->find($productId)) {
+            return $this->responseNotFound(self::RESPONSE_404);
+        }
+
         $groups = $request->query->all('groups');
 
         return $this->response($product, $groups);
     }
 
-    #[Route('/products/{product}', name: 'edit_product', methods: ['PATCH'])]
+    #[Route('/products/{productId}', name: 'edit_product', methods: ['PATCH'])]
     public function edit(
-        Product $product,
+        int $productId,
         Request $request,
         EntityManagerInterface $entityManager,
         CategoryRepository $categoryRepository,
         SupplierRepository $supplierRepository,
+        ProductRepository $productRepository,
     ): JsonResponse {
+        if (!$product = $productRepository->find($productId)) {
+            return $this->responseNotFound(self::RESPONSE_404);
+        }
+
         $content = json_decode($request->getContent());
         $groups = $request->query->all('groups');
         $category = $categoryRepository->find($content->category);
