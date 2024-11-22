@@ -16,7 +16,6 @@ final class Version20241120110559 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('ALTER TABLE product DROP CONSTRAINT fk_d34a04adc54c8c93');
         $this->addSql('DROP SEQUENCE type_id_seq CASCADE');
         $this->addSql('DROP TABLE type');

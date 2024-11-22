@@ -6,8 +6,10 @@ use App\DTO\paginationDTO;
 use App\Entity\Category;
 use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
@@ -19,6 +21,20 @@ class CategoryController extends ApiController
 {
     private const RESPONSE_404 = 'Category not found';
 
+    #[OA\Get(path: '/api/categories')]
+    #[OA\Parameter(
+        name: 'groups[]',
+        description: 'group deserializer',
+        in: 'query',
+    )]
+    #[OA\Response(
+        response: Response::HTTP_OK,
+        description: 'All categories',
+        content: [
+            new OA\MediaType('application/json'),
+            new OA\Property('items', new paginationDTO(), null, 'categories', 'All categories'),
+        ]
+    )]
     #[Route('/categories', name: 'show_categories', methods: ['GET'])]
     public function getCategories(
         Request $request,

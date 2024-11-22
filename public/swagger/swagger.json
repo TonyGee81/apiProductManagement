@@ -1,0 +1,38 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API Product Management",
+        "license": {
+            "name": "MIT"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8000",
+            "description": "Management product"
+        }
+    ],
+    "paths": {
+        "/api/categories": {
+            "get": {
+                "operationId": "97cc2d40e3049080b7363bd694f94b48",
+                "parameters": [
+                    {
+                        "name": "groups",
+                        "in": "query",
+                        "description": "group deserializer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "All categories",
+                        "content": {
+                            "application/json": {}
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

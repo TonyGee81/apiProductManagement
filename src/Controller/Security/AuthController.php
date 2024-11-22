@@ -5,10 +5,12 @@ namespace App\Controller\Security;
 use App\Controller\ApiController;
 use App\Entity\User;
 use Doctrine\Persistence\ManagerRegistry;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[Route('/api', name: 'api_')]
 class AuthController extends ApiController
@@ -23,7 +25,7 @@ class AuthController extends ApiController
         $roles = $request->get('roles');
 
         if (empty($password) || empty($email)) {
-            return $this->respondValidationError('Invalid Password or Email');
+            return $this->responseValidationError('Invalid Password or Email');
         }
 
         $user = new User();
@@ -36,7 +38,7 @@ class AuthController extends ApiController
         $em->persist($user);
         $em->flush();
 
-        return $this->respondWithSuccess(sprintf('User %s successfully created', $user->getUsername()));
+        return $this->responseWithSuccess(sprintf('User %s successfully created', $user->getUsername()));
     }
 
     /**
