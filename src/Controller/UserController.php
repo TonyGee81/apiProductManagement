@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\DTO\paginationDTO;
 use App\Repository\UserRepository;
+use App\Service\UserInfo;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\MapQueryString;
@@ -36,6 +37,20 @@ class UserController extends ApiController
         UserRepository $userRepository,
     ): JsonResponse {
         if (!$user = $userRepository->find($userId)) {
+            return $this->responseNotFound(self::RESPONSE_404);
+        }
+
+        $groups = $request->query->all('groups');
+
+        return $this->response($user, $groups);
+    }
+
+    #[Route('/user/current', name: 'current_user', methods: ['GET'])]
+    public function get(
+        Request $request,
+        UserInfo $userInfo,
+    ): JsonResponse {
+        if (!$user = $userInfo->getUser()) {
             return $this->responseNotFound(self::RESPONSE_404);
         }
 
