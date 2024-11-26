@@ -25,7 +25,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, EntityI
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups([self::GROUP_SHOW_ALL,  self::GROUP_SHOW_ONE, self::GROUP_EDIT])]
+    #[Groups([self::GROUP_EDIT])]
     private ?int $id = null;
 
     #[ORM\Column(type: 'string', length: 180, unique: true)]
