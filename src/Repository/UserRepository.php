@@ -6,6 +6,8 @@ use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
+use Knp\Component\Pager\Pagination\PaginationInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
@@ -15,9 +17,24 @@ use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
  */
 class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, private readonly PaginatorInterface $paginator)
     {
         parent::__construct($registry, User::class);
+    }
+
+    public function paginateUsers(int $page): PaginationInterface
+    {
+        return $this->paginator->paginate(
+            $this
+                ->createQueryBuilder('u')
+                ->orderBy('u.username', 'ASC'),
+            $page,
+            20,
+            [
+                'distinct' => true,
+                'sortFieldAllowList' => ['u.username'],
+            ]
+        );
     }
 
     public function loadUserByIdentifier(string $usernameOrEmail): ?User

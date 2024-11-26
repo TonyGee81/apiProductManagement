@@ -16,5 +16,4 @@ use OpenApi\Attributes as OA;
 #[OA\License(name: 'MIT')]
 class OpenApiSpec
 {
-
 }

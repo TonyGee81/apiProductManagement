@@ -22,7 +22,7 @@ class ProductController extends ApiController
     private const RESPONSE_404 = 'Product not found';
 
     #[Route('/products', name: 'show_products', methods: ['GET'])]
-    public function getProducts(
+    public function showProducts(
         Request $request,
         ProductRepository $productRepository,
         #[MapQueryString]
@@ -35,7 +35,7 @@ class ProductController extends ApiController
     }
 
     #[Route('/products/{productId}', name: 'show_product', methods: ['GET'])]
-    public function getProduct(
+    public function showProduct(
         int $productId,
         Request $request,
         ProductRepository $productRepository,

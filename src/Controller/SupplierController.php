@@ -20,7 +20,7 @@ class SupplierController extends ApiController
     private const RESPONSE_404 = 'Supplier not found';
 
     #[Route('/suppliers', name: 'show_suppliers', methods: ['GET'])]
-    public function getSuppliers(
+    public function showSuppliers(
         Request $request,
         SupplierRepository $supplierRepository,
         #[MapQueryString]
@@ -33,7 +33,7 @@ class SupplierController extends ApiController
     }
 
     #[Route('/suppliers/{supplierId}', name: 'show_supplier', methods: ['GET'])]
-    public function getCategory(
+    public function showSupplier(
         int $supplierId,
         Request $request,
         SupplierRepository $supplierRepository,
@@ -54,7 +54,6 @@ class SupplierController extends ApiController
         EntityManagerInterface $entityManager,
         SupplierRepository $supplierRepository,
     ): JsonResponse {
-
         if (!$supplier = $supplierRepository->find($supplierId)) {
             return $this->responseNotFound(self::RESPONSE_404);
         }

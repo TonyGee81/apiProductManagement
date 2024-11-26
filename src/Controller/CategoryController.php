@@ -36,7 +36,7 @@ class CategoryController extends ApiController
         ]
     )]
     #[Route('/categories', name: 'show_categories', methods: ['GET'])]
-    public function getCategories(
+    public function showCategories(
         Request $request,
         CategoryRepository $categoryRepository,
         #[MapQueryString]
@@ -49,7 +49,7 @@ class CategoryController extends ApiController
     }
 
     #[Route('/categories/{categoryId}', name: 'show_category', methods: ['GET'])]
-    public function getCategory(
+    public function showCategory(
         int $categoryId,
         Request $request,
         CategoryRepository $categoryRepository,

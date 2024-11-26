@@ -57,7 +57,6 @@ class ImportController extends ApiController
             ];
 
             return $this->response($data, []);
-
         } catch (\Exception $ex) {
             return $this->responseWithErrors($ex->getMessage());
         }

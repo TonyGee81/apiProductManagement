@@ -5,12 +5,10 @@ namespace App\Controller\Security;
 use App\Controller\ApiController;
 use App\Entity\User;
 use Doctrine\Persistence\ManagerRegistry;
-use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 #[Route('/api', name: 'api_')]
 class AuthController extends ApiController
@@ -32,20 +30,12 @@ class AuthController extends ApiController
         $user
             ->setPassword($passwordHasher->hashPassword($user, $password))
             ->setEmail($email)
-            ->setUsername($email)
+            ->setUsername(substr($email, 0, strpos($email, '@')))
             ->setRoles($roles)
         ;
         $em->persist($user);
         $em->flush();
 
         return $this->responseWithSuccess(sprintf('User %s successfully created', $user->getUsername()));
-    }
-
-    /**
-     * @return JsonResponse
-     */
-    public function getTokenUser(UserInterface $user, JWTTokenManagerInterface $JWTManager)
-    {
-        return new JsonResponse(['token' => $JWTManager->create($user)]);
     }
 }
