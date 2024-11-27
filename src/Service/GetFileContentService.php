@@ -6,8 +6,12 @@ class GetFileContentService
 {
     public function getCSVContent(string $path): bool|array
     {
+        if (!file_exists($path)) {
+            throw new \InvalidArgumentException("File not found: $path");
+        }
+
         if (!($handle = fopen($path, 'r'))) {
-            return false;
+            throw new \RuntimeException("Unable to open file: $path");
         }
 
         $csvData = [];
