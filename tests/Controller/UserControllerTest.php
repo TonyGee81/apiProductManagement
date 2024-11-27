@@ -13,6 +13,4 @@ class UserControllerTest extends WebTestCase
         $this->assertResponseStatusCodeSame('401');
         $this->assertJson(401, 'JWT Token not found');
     }
-
-
 }
