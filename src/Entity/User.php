@@ -34,12 +34,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, EntityI
 
     #[ORM\Column(length: 180)]
     #[Groups([self::GROUP_CREATE, self::GROUP_EDIT, self::GROUP_SHOW_ALL, self::GROUP_SHOW_ONE])]
-    private ?string $email = null;
+    private ?string $email;
+
+    #[ORM\Column(length: 180, nullable: true)]
+    #[Groups([self::GROUP_CREATE, self::GROUP_EDIT, self::GROUP_SHOW_ALL, self::GROUP_SHOW_ONE])]
+    private ?string $firstName = null;
+
+    #[ORM\Column(length: 180, nullable: true)]
+    #[Groups([self::GROUP_CREATE, self::GROUP_EDIT, self::GROUP_SHOW_ALL, self::GROUP_SHOW_ONE])]
+    private ?string $lastName = null;
 
     /**
      * @var list<string> The user roles
      */
     #[ORM\Column]
+    #[Groups([self::GROUP_CREATE, self::GROUP_EDIT, self::GROUP_SHOW_ALL, self::GROUP_SHOW_ONE])]
     private array $roles = [];
 
     /**
@@ -73,6 +82,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, EntityI
     public function setEmail(string $email): static
     {
         $this->email = $email;
+
+        return $this;
+    }
+
+    public function getFirstName(): ?string
+    {
+        return $this->firstName;
+    }
+
+    public function setFirstName(?string $firstName): self
+    {
+        $this->firstName = $firstName;
+
+        return $this;
+    }
+
+    public function getLastName(): ?string
+    {
+        return $this->lastName;
+    }
+
+    public function setLastName(?string $lastName): self
+    {
+        $this->lastName = $lastName;
 
         return $this;
     }
