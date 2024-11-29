@@ -20,6 +20,7 @@ class ImportController extends ApiController
 {
     /**
      * @throws ExceptionInterface
+     * @throws \Exception
      */
     #[Route('/csv', name: 'csv', methods: ['POST'])]
     public function index(
@@ -29,10 +30,19 @@ class ImportController extends ApiController
         MessageBusInterface $bus,
     ): JsonResponse {
         $supplierData = $request->request->get('supplier');
+        if (!$supplierData) {
+            throw new \Exception('No supplier data found');
+        }
         /** @var Supplier $supplier */
         $supplier = $supplierRepository->find($supplierData);
         /** @var UploadedFile $file */
         $file = $request->files->get('csv');
+        if (!$file) {
+            throw new \Exception('No file provider');
+        } $this->responseWithErrors('Invalid file type');
+        if ('text/csv' !== $file->getClientMimeType()) {
+            throw new \Exception('Invalid file type');
+        }
         $data = $getFileContentService->getCSVContent($file->getPathname());
 
         try {
