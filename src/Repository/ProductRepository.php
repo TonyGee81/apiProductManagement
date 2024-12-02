@@ -24,8 +24,8 @@ class ProductRepository extends ServiceEntityRepository
             $this
                 ->createQueryBuilder('p')
                 ->leftJoin('p.supplier', 's')
-                ->leftJoin('p.type', 't')
-                ->addSelect('s', 't')
+                ->leftJoin('p.category', 'c')
+                ->addSelect('s', 'c')
                 ->orderBy('p.name', 'ASC'),
             $page,
             20,
