@@ -32,11 +32,11 @@ class Category implements EntityInterface, SlugInterface
     private $id;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups([self::GROUP_CREATE, self::GROUP_EDIT, self::GROUP_SHOW_ALL, self::GROUP_SHOW_ONE, Product::GROUP_EDIT])]
+    #[Groups([self::GROUP_CREATE, self::GROUP_EDIT, self::GROUP_SHOW_ALL, self::GROUP_SHOW_ONE, Product::GROUP_EDIT, Product::GROUP_SHOW_ONE])]
     private ?string $name = null;
 
     /**
-     * @var Collection<int, Type>
+     * @var Collection<int, Product>
      */
     #[ORM\OneToMany(targetEntity: Product::class, mappedBy: 'type', orphanRemoval: true)]
     private Collection $products;

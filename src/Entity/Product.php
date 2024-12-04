@@ -23,7 +23,7 @@ class Product implements EntityInterface, SlugInterface
     private const GROUP_CREATE = 'create_product';
     public const GROUP_EDIT = 'edit_product';
     private const GROUP_SHOW_ALL = 'show_products';
-    private const GROUP_SHOW_ONE = 'show_product';
+    public const GROUP_SHOW_ONE = 'show_product';
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -49,11 +49,11 @@ class Product implements EntityInterface, SlugInterface
     private ?string $country = null;
 
     #[ORM\Column(type: Types::BOOLEAN)]
-    #[Groups([self::GROUP_CREATE, self::GROUP_EDIT, self::GROUP_SHOW_ALL, self::GROUP_SHOW_ONE])]
+    #[Groups([self::GROUP_CREATE, self::GROUP_EDIT, self::GROUP_SHOW_ONE])]
     private bool $isEuropeanUnion = false;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups([self::GROUP_CREATE, self::GROUP_EDIT, self::GROUP_SHOW_ALL, self::GROUP_SHOW_ONE])]
+    #[Groups([self::GROUP_CREATE, self::GROUP_EDIT, self::GROUP_SHOW_ONE])]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2, nullable: false)]
