@@ -27,7 +27,7 @@ class Supplier implements EntityInterface, SlugInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups([self::GROUP_SHOW_ALL,  self::GROUP_SHOW_ONE, self::GROUP_EDIT])]
+    #[Groups([self::GROUP_SHOW_ALL,  self::GROUP_SHOW_ONE, self::GROUP_EDIT, Product::GROUP_SHOW_ONE])]
     private $id;
 
     #[ORM\Column(length: 255, nullable: false)]
